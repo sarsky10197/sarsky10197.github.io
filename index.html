@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>終極特種兵：東京富士箱根六日極限遠征</title>
     <style>
         :root {
@@ -17,100 +17,106 @@
             --tag-yellow: #ffc107;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", "PingFang TC", sans-serif; }
-        body { background-color: #ebedef; padding: 20px; display: flex; justify-content: center; line-height: 1.6;}
+        /* 加入 iPhone 最佳化字體與基礎設定 */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif; }
+        body { background-color: #ebedef; padding: 10px; display: flex; justify-content: center; line-height: 1.6; -webkit-text-size-adjust: 100%; }
         
         .container {
             background-color: #ffffff; width: 100%; max-width: 1200px;
-            border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.2); overflow: hidden;
+            border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden;
         }
 
-        /* 頂部導航頁籤 */
-        .tabs { display: flex; background-color: var(--cola-blue); color: white; position: sticky; top: 0; z-index: 100; }
+        /* 頂部導航頁籤：改為 iPhone 可橫向滑動 */
+        .tabs { 
+            display: flex; background-color: var(--cola-blue); color: white; position: sticky; top: 0; z-index: 100;
+            overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
         .tab-btn {
-            flex: 1; padding: 20px 10px; text-align: center; font-size: 18px; font-weight: bold;
+            flex: 0 0 auto; padding: 16px 15px; text-align: center; font-size: 16px; font-weight: bold;
             cursor: pointer; transition: 0.3s; border: none; background: none; color: white; outline: none;
         }
-        .tab-btn:hover { background-color: rgba(255,255,255,0.15); }
         .tab-btn.active { background-color: var(--cola-purple); border-bottom: 4px solid #fff; }
 
-        /* 內容區 */
-        .tab-content { display: none; padding: 40px; max-height: 85vh; overflow-y: auto; scroll-behavior: smooth; }
+        /* 內容區：減少手機版邊距 */
+        .tab-content { display: none; padding: 20px 15px; max-height: 88vh; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         .tab-content.active { display: block; }
 
-        /* ================= 樣式 1：景點介紹 (六大頁超詳細版) ================= */
-        .intro-nav { position: sticky; top: -40px; background: #fff; padding: 10px 0; border-bottom: 2px solid var(--border-color); z-index: 10; margin-bottom: 30px; text-align: center; }
-        .intro-nav a { display: inline-block; margin: 0 10px; padding: 8px 16px; background: var(--bg-light); color: var(--cola-blue); text-decoration: none; border-radius: 20px; font-weight: bold; font-size: 14px; }
+        /* ================= 樣式 1：景點介紹 ================= */
+        .intro-nav { 
+            position: sticky; top: -20px; background: rgba(255,255,255,0.95); padding: 12px 0; 
+            border-bottom: 2px solid var(--border-color); z-index: 10; margin-bottom: 20px; 
+            overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; 
+            display: flex; gap: 10px; backdrop-filter: blur(5px);
+        }
+        .intro-nav::-webkit-scrollbar { display: none; }
+        .intro-nav a { flex: 0 0 auto; padding: 8px 16px; background: var(--bg-light); color: var(--cola-blue); text-decoration: none; border-radius: 20px; font-weight: bold; font-size: 14px; }
         .intro-nav a:hover { background: var(--cola-purple-light); }
 
-        .day-block { margin-bottom: 80px; min-height: 600px; } /* 確保一天佔據極大版面 */
-        .day-title { font-size: 38px; color: var(--cola-purple); font-weight: 900; margin-bottom: 30px; border-bottom: 3px solid var(--border-color); padding-bottom: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.05); }
+        .day-block { margin-bottom: 60px; } 
+        .day-title { font-size: 26px; color: var(--cola-purple); font-weight: 900; margin-bottom: 25px; border-bottom: 3px solid var(--border-color); padding-bottom: 12px; line-height: 1.3; }
         
-        .attraction-article { margin-bottom: 50px; display: flex; gap: 30px; flex-wrap: wrap; }
-        .attraction-text { flex: 1; min-width: 300px; }
-        .attraction-text h3 { font-size: 26px; color: var(--cola-blue); margin-bottom: 15px; display: flex; align-items: center; }
-        .attraction-text h3 span.tag { background-color: var(--cola-purple); color: white; font-size: 14px; padding: 4px 10px; border-radius: 4px; margin-right: 12px; font-weight: normal; }
-        .attraction-text p { font-size: 16px; color: var(--text-dark); margin-bottom: 18px; text-align: justify; letter-spacing: 0.5px; line-height: 1.8; }
+        .attraction-article { margin-bottom: 40px; display: flex; flex-direction: column; gap: 20px; }
+        .attraction-text { flex: 1; }
+        .attraction-text h3 { font-size: 20px; color: var(--cola-blue); margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+        .attraction-text h3 span.tag { background-color: var(--cola-purple); color: white; font-size: 13px; padding: 4px 8px; border-radius: 4px; font-weight: normal; align-self: flex-start; }
+        .attraction-text p { font-size: 16px; color: var(--text-dark); margin-bottom: 15px; text-align: justify; line-height: 1.7; }
         
-        .attraction-img-box { width: 450px; flex-shrink: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
-        .attraction-img-box img { width: 100%; height: 300px; object-fit: cover; display: block; }
-        .img-caption { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; padding: 15px; font-weight: bold; font-size: 16px; }
+        .attraction-img-box { width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; }
+        .attraction-img-box img { width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover; display: block; }
+        .img-caption { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: white; padding: 12px; font-weight: bold; font-size: 15px; }
 
         /* ================= 樣式 2：行前提醒篇 ================= */
-        .reminder-section { margin-bottom: 40px; }
-        .reminder-section h2 { color: var(--alert-red); border-bottom: 2px solid var(--alert-red); padding-bottom: 10px; margin-bottom: 20px; font-size: 28px; }
-        .transport-card { background: #fff8e1; border-left: 8px solid var(--tag-yellow); padding: 25px; border-radius: 8px; font-size: 18px; line-height: 1.8; color: #333; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .reminder-section { margin-bottom: 30px; }
+        .reminder-section h2 { color: var(--alert-red); border-bottom: 2px solid var(--alert-red); padding-bottom: 10px; margin-bottom: 15px; font-size: 22px; }
+        .transport-card { background: #fff8e1; border-left: 6px solid var(--tag-yellow); padding: 18px; border-radius: 8px; font-size: 16px; line-height: 1.7; color: #333; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .transport-card strong { color: #d84315; }
         
-        .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-        .check-card { border: 1px solid var(--border-color); padding: 25px; border-radius: 10px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .check-card h4 { color: var(--cola-purple); margin-bottom: 15px; font-size: 20px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
-        .check-card ul { padding-left: 25px; line-height: 1.8; color: var(--text-dark); font-size: 16px; }
-        .check-card ul li { margin-bottom: 8px; }
+        .check-grid { display: flex; flex-direction: column; gap: 15px; }
+        .check-card { border: 1px solid var(--border-color); padding: 18px; border-radius: 10px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .check-card h4 { color: var(--cola-purple); margin-bottom: 12px; font-size: 18px; border-bottom: 1px dashed #ccc; padding-bottom: 8px; }
+        .check-card ul { padding-left: 20px; line-height: 1.7; color: var(--text-dark); font-size: 15px; }
+        .check-card ul li { margin-bottom: 6px; }
 
-        /* ================= 樣式 3：極限時間軸 ================= */
-        .period-header { background-color: #34495e; color: white; padding: 10px 15px; font-size: 18px; font-weight: bold; margin-top: 30px; border-radius: 6px 6px 0 0; }
+        /* ================= 樣式 3：極限時間軸 (加入橫向滑動包裝) ================= */
+        .period-header { background-color: #34495e; color: white; padding: 10px 15px; font-size: 16px; font-weight: bold; margin-top: 25px; border-radius: 6px 6px 0 0; }
         .period-header.breakfast { background-color: #f39c12; }
         .period-header.lunch { background-color: #27ae60; }
         .period-header.dinner { background-color: #8e44ad; }
         .period-header.supper { background-color: #c0392b; }
 
-        .timeline-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 0 0 6px 6px; overflow: hidden; }
-        .timeline-table th, .timeline-table td { border: 1px solid var(--border-color); padding: 15px; text-align: left; vertical-align: top; }
-        .timeline-table th { background-color: #ecf0f1; color: #2c3e50; font-size: 16px; }
-        .timeline-table tr:hover { background-color: #f5f7f8; }
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-radius: 0 0 6px 6px; margin-bottom: 30px; }
+        .timeline-table { width: 100%; min-width: 500px; border-collapse: collapse; }
+        .timeline-table th, .timeline-table td { border: 1px solid var(--border-color); padding: 12px; text-align: left; vertical-align: top; }
+        .timeline-table th { background-color: #ecf0f1; color: #2c3e50; font-size: 15px; }
         
-        .col-time { width: 140px; font-weight: 900; color: var(--cola-blue); font-size: 16px; }
-        .col-type { width: 90px; text-align: center; }
-        .col-desc { font-size: 16px; color: #333; line-height: 1.6; }
+        .col-time { width: 120px; font-weight: 900; color: var(--cola-blue); font-size: 15px; }
+        .col-type { width: 80px; text-align: center; }
+        .col-desc { font-size: 15px; color: #333; line-height: 1.6; }
         
-        .badge { display: inline-block; padding: 5px 10px; border-radius: 4px; font-size: 13px; font-weight: bold; color: white; }
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 13px; font-weight: bold; color: white; white-space: nowrap; }
         .b-flight { background-color: #e74c3c; }
         .b-train { background-color: #3498db; }
         .b-walk { background-color: #2ecc71; }
         .b-shop { background-color: #f1c40f; color: #333; }
         .b-food { background-color: #e67e22; }
 
-        /* 新增：預留時間的美化標籤 */
         .buffer-badge {
-            display: inline-flex;
-            align-items: center;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            color: #555;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            margin-left: 8px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            white-space: nowrap;
+            display: inline-flex; align-items: center; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            color: #555; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: bold;
+            margin-top: 8px; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap;
         }
 
-        @media (max-width: 900px) {
-            .attraction-article { flex-direction: column; }
-            .attraction-img-box { width: 100%; }
-            .col-time { width: 100px; font-size: 14px; }
+        /* 桌面版依然保持雙欄等漂亮排版 */
+        @media (min-width: 768px) {
+            body { padding: 20px; }
+            .tab-content { padding: 40px; }
+            .attraction-article { flex-direction: row; }
+            .attraction-text h3 { flex-direction: row; align-items: center; }
+            .attraction-text h3 span.tag { align-self: auto; margin-right: 12px; }
+            .attraction-img-box { width: 400px; height: 280px; flex-shrink: 0; }
+            .attraction-img-box img { height: 100%; }
+            .check-grid { flex-direction: row; display: grid; grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -335,223 +341,172 @@
 
     <div id="tab-timeline" class="tab-content">
         
-        <h2 class="day-title" style="font-size:28px; border:none; margin-bottom:10px;">📅 03/21（六） Day 1｜紅眼航班、澡堂回血、晴空塔與澀谷夕陽</h2>
+        <h2 class="day-title" style="font-size:22px; border:none; margin-bottom:10px;">📅 03/21（六） Day 1｜紅眼航班、澡堂回血、晴空塔與澀谷夕陽</h2>
         
         <div class="period-header breakfast">【上午】早餐後 ｜ 航班抵達與前往淺草</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">02:30 - 06:35</td><td class="col-type"><span class="badge b-flight">飛行</span></td><td class="col-desc">桃園機場 T1 (02:30) ➡️ 東京成田機場 T3 (06:35)。</td></tr>
-            <tr><td class="col-time">06:35 - 07:30</td><td class="col-type"><span class="badge b-walk">通關</span></td><td class="col-desc">辦理入境與提領行李，步行至 T2 鐵道站。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">07:50 - 08:52</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">🚄 搭乘 <strong>京成電鐵 Access 特急</strong> (一車直達) B1樓成田 ➡️ 08:52 淺草 A2b 出口。</td></tr>
-            <tr><td class="col-time">09:00 - 09:30</td><td class="col-type"><span class="badge b-walk">飯店</span></td><td class="col-desc">步行至 ASAKUSA YOSHII hotel 寄放行李。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">09:40 - 11:10</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">步行前往「曙湯 浅草銭湯」，洗澡泡湯恢復體力 (停留 1.5 小時)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">11:30 - 12:00</td><td class="col-type"><span class="badge b-walk">打卡</span></td><td class="col-desc">必拍晴空塔：步行至隅田公園或隅田川步道，拍攝無死角美照 (停留 30 分)。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">02:30 - 06:35</td><td class="col-type"><span class="badge b-flight">飛行</span></td><td class="col-desc">桃園機場 T1 (02:30) ➡️ 東京成田機場 T3 (06:35)。</td></tr>
+                <tr><td class="col-time">06:35 - 07:30</td><td class="col-type"><span class="badge b-walk">通關</span></td><td class="col-desc">辦理入境與提領行李，步行至 T2 鐵道站。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">07:50 - 08:52</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">🚄 搭乘 <strong>京成電鐵 Access 特急</strong> (一車直達) B1樓成田 ➡️ 08:52 淺草 A2b 出口。</td></tr>
+                <tr><td class="col-time">09:00 - 09:30</td><td class="col-type"><span class="badge b-walk">飯店</span></td><td class="col-desc">步行至 ASAKUSA YOSHII hotel 寄放行李。<br><span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
+                <tr><td class="col-time">09:40 - 11:10</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">步行前往「曙湯 浅草銭湯」，洗澡泡湯恢復體力 (停留 1.5 小時)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">11:30 - 12:00</td><td class="col-type"><span class="badge b-walk">打卡</span></td><td class="col-desc">必拍晴空塔：步行至隅田公園或隅田川步道，拍攝無死角美照 (停留 30 分)。<br><span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
+            </table>
+        </div>
 
         <div class="period-header lunch">【下午】午餐後 ｜ 淺草逛街與澀谷</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">12:10 - 13:30</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">淺草周邊吃午餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">13:50 - 15:20</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">淺草西參道商店街、唐吉訶德採買 (停留 1.5 小時)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">15:35 - 16:15</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭乘地鐵銀座線直達澀谷 (車程 40 分)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">16:30 - 18:00</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc"><strong>Shibuya Sky 展望台</strong> 看夕陽與夜景 (停留 1.5 小時)。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">12:10 - 13:30</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">淺草周邊吃午餐 (依 TABELOG)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">13:50 - 15:20</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">淺草西參道商店街、唐吉訶德採買 (停留 1.5 小時)。<br><span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
+                <tr><td class="col-time">15:35 - 16:15</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭乘地鐵銀座線直達澀谷 (車程 40 分)。<br><span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
+                <tr><td class="col-time">16:30 - 18:00</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc"><strong>Shibuya Sky 展望台</strong> 看夕陽與夜景 (停留 1.5 小時)。<br><span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
+            </table>
+        </div>
 
         <div class="period-header dinner">【晚上】晚餐後 ｜ 澀谷打卡與晚餐</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">18:10 - 19:10</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">拍忠犬八公、逛 THE SHIBUYA SOUVENIR STORE 買伴手禮 (停留 1 小時)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">19:30 - 21:00</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">澀谷周邊吃晚餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-            <tr><td class="col-time">21:30 - 22:00</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車返回淺草。</td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">18:10 - 19:10</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">拍忠犬八公、逛 THE SHIBUYA SOUVENIR STORE 買伴手禮 (停留 1 小時)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">19:30 - 21:00</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">澀谷周邊吃晚餐 (依 TABELOG)。<br><span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
+                <tr><td class="col-time">21:30 - 22:00</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車返回淺草。</td></tr>
+            </table>
+        </div>
 
         <div class="period-header supper">【深夜】宵夜後</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">22:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋 (淺草飯店附近喝一杯，絕對不可吃安眠藥)。</td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">22:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋 (淺草飯店附近喝一杯，絕對不可吃安眠藥)。</td></tr>
+            </table>
+        </div>
 
-        <h2 class="day-title" style="font-size:28px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/22（日） Day 2｜太陽城、淺草觀光、夜櫻與新宿探險</h2>
+        <h2 class="day-title" style="font-size:22px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/22（日） Day 2｜太陽城、淺草觀光、夜櫻與新宿探險</h2>
         
         <div class="period-header breakfast">【上午】早餐後 ｜ 衝刺池袋宅行程</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">08:00 - 08:40</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">從淺草出發搭車前往池袋 (車程約 40 分)。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">08:50 - 12:00</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">逛池袋太陽城 Sunshine City (寶可夢中心、扭蛋等) (停留 3 小時 10 分)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">08:00 - 08:40</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">從淺草出發搭車前往池袋 (車程約 40 分)。<br><span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
+                <tr><td class="col-time">08:50 - 12:00</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">逛池袋太陽城 Sunshine City (寶可夢中心、扭蛋等) (停留 3 小時 10 分)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+            </table>
+        </div>
 
         <div class="period-header lunch">【下午】午餐後 ｜ 鸚鵡咖啡廳與夜櫻</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">12:20 - 13:40</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">池袋周邊吃午餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">14:00 - 14:40</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車返回淺草周邊。</td></tr>
-            <tr><td class="col-time">14:40 - 15:40</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">淺草觀光中心 8F、雷門散步打卡 (停留 1 小時)。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">15:50 - 16:10</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車前往千駄木。</td></tr>
-            <tr><td class="col-time">16:20 - 17:30</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">Torino iru Cafe 鸚鵡咖啡廳 (停留 1 小時 10 分)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">12:20 - 13:40</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">池袋周邊吃午餐 (依 TABELOG)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">14:00 - 14:40</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車返回淺草周邊。</td></tr>
+                <tr><td class="col-time">14:40 - 15:40</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">淺草觀光中心 8F、雷門散步打卡 (停留 1 小時)。<br><span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
+                <tr><td class="col-time">15:50 - 16:10</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車前往千駄木。</td></tr>
+                <tr><td class="col-time">16:20 - 17:30</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">Torino iru Cafe 鸚鵡咖啡廳 (停留 1 小時 10 分)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+            </table>
+        </div>
 
         <div class="period-header dinner">【晚上】晚餐後 ｜ 六義園與新宿之夜</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">18:00 - 19:30</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">準時進入 <strong>六義園</strong> 賞夜櫻 (停留 1.5 小時)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-            <tr><td class="col-time">20:00 - 21:30</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">抵達新宿，新宿周邊吃晚餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">21:50 - 22:30</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">漫步大久保公園外圍與歌舞伎町一番街感受氣氛 (停留 40 分)。</td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">18:00 - 19:30</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">準時進入 <strong>六義園</strong> 賞夜櫻 (停留 1.5 小時)。<br><span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
+                <tr><td class="col-time">20:00 - 21:30</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">抵達新宿，新宿周邊吃晚餐 (依 TABELOG)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">21:50 - 22:30</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">漫步大久保公園外圍與歌舞伎町一番街感受氣氛 (停留 40 分)。</td></tr>
+            </table>
+        </div>
 
         <div class="period-header supper">【深夜】宵夜後</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">22:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋 (在新宿歌舞伎町一番街附近吃吃喝喝的居酒屋)。</td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">22:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋 (在新宿歌舞伎町一番街附近吃吃喝喝的居酒屋)。</td></tr>
+            </table>
+        </div>
 
-        <h2 class="day-title" style="font-size:28px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/23（一） Day 3｜築地、史努比、橫濱</h2>
+        <h2 class="day-title" style="font-size:22px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/23（一） Day 3｜築地、史努比、橫濱</h2>
         
         <div class="period-header breakfast">【上午】早餐後 ｜ 築地海鮮與移動</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">08:00 - 08:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">淺草前往築地市場。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">08:40 - 10:20</td><td class="col-type"><span class="badge b-food">行程</span></td><td class="col-desc">築地市場吃和牛與海鮮 (停留 1 小時 40 分)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">10:40 - 11:40</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車前往南町田 (車程 1 小時)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">08:00 - 08:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">淺草前往築地市場。<br><span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
+                <tr><td class="col-time">08:40 - 10:20</td><td class="col-type"><span class="badge b-food">行程</span></td><td class="col-desc">築地市場吃和牛與海鮮 (停留 1 小時 40 分)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">10:40 - 11:40</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車前往南町田 (車程 1 小時)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+            </table>
+        </div>
 
         <div class="period-header lunch">【下午】午餐後 ｜ 史努比與橫濱掃貨</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">12:00 - 13:30</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">南町田周邊吃午餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">13:45 - 15:15</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">史努比博物館與 Outlet (停留 1.5 小時)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">15:30 - 16:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車前往橫濱站。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">16:40 - 18:30</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">橫濱 VIVRE (Animate/駿河屋)、寶可夢中心看蓋歐卡 (停留 1 小時 50 分)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">12:00 - 13:30</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">南町田周邊吃午餐 (依 TABELOG)。<br><span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
+                <tr><td class="col-time">13:45 - 15:15</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">史努比博物館與 Outlet (停留 1.5 小時)。<br><span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
+                <tr><td class="col-time">15:30 - 16:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭車前往橫濱站。<br><span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
+                <tr><td class="col-time">16:40 - 18:30</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">橫濱 VIVRE (Animate/駿河屋)、寶可夢中心看蓋歐卡 (停留 1 小時 50 分)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+            </table>
+        </div>
 
         <div class="period-header dinner">【晚上】晚餐後 ｜ 港灣夜景與晚餐</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">18:50 - 20:00</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">橫濱地標塔 69 樓 Sky Garden 看夜景 (停留 1 小時 10 分)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">20:20 - 21:50</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">橫濱周邊吃晚餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-            <tr><td class="col-time">22:20</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">返抵淺草。</td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">18:50 - 20:00</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">橫濱地標塔 69 樓 Sky Garden 看夜景 (停留 1 小時 10 分)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">20:20 - 21:50</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">橫濱周邊吃晚餐 (依 TABELOG)。<br><span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
+                <tr><td class="col-time">22:20</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">返抵淺草。</td></tr>
+            </table>
+        </div>
         
         <div class="period-header supper">【深夜】宵夜後</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">22:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋。</td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">22:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋。</td></tr>
+            </table>
+        </div>
 
-        <h2 class="day-title" style="font-size:28px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/24（二） Day 4｜貓頭鷹、明治神宮、銀座下午茶、東京鐵塔、秋葉原</h2>
+        <h2 class="day-title" style="font-size:22px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/24（二） Day 4｜貓頭鷹、明治神宮、銀座下午茶、東京鐵塔、秋葉原</h2>
         
         <div class="period-header breakfast">【上午】早餐後 ｜ 谷中貓頭鷹與神宮</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">08:00 - 08:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">淺草前往谷中 (車程 30 分)。</td></tr>
-            <tr><td class="col-time">08:40 - 10:40</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">東京都台東区谷中 2-3-16 貓頭鷹咖啡廳看貓頭鷹 (停留 2 小時)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">11:00 - 12:00</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">搭車前往並散步明治神宮 (停留 1 小時)。</td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">08:00 - 08:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">淺草前往谷中 (車程 30 分)。</td></tr>
+                <tr><td class="col-time">08:40 - 10:40</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">東京都台東区谷中 2-3-16 貓頭鷹咖啡廳看貓頭鷹 (停留 2 小時)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">11:00 - 12:00</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">搭車前往並散步明治神宮 (停留 1 小時)。</td></tr>
+            </table>
+        </div>
 
         <div class="period-header lunch">【下午】午餐後 ｜ 甜點與東京鐵塔</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">12:10 - 13:40</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">原宿周邊吃午餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-            <tr><td class="col-time">14:10 - 16:10</td><td class="col-type"><span class="badge b-food">行程</span></td><td class="col-desc">銀座 HARBS LUMINE 有樂町店吃水果千層、藍瓶咖啡 (停留 2 小時)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">16:30 - 17:40</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">東京鐵塔周邊拍橘紅點燈夜景 (停留 1 小時 10 分)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-        </table>
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">12:10 - 13:40</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">原宿周邊吃午餐 (依 TABELOG)。<br><span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
+                <tr><td class="col-time">14:10 - 16:10</td><td class="col-type"><span class="badge b-food">行程</span></td><td class="col-desc">銀座 HARBS LUMINE 有樂町店吃水果千層、藍瓶咖啡 (停留 2 小時)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+                <tr><td class="col-time">16:30 - 17:40</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">東京鐵塔周邊拍橘紅點燈夜景 (停留 1 小時 10 分)。<br><span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
+            </table>
+        </div>
 
         <div class="period-header dinner">【晚上】晚餐後 ｜ 秋葉原宅力全開</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">18:00 - 20:30</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">秋葉原女僕咖啡廳、ACG 模型店掃貨 (停留 2.5 小時)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-            <tr><td class="col-time">21:00 - 22:00</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">秋葉原周邊吃晚餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">22:15</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">帶著戰利品搭車回淺草。</td></tr>
-        </table>
-        
-        <div class="period-header supper">【深夜】宵夜後</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">22:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋。</td></tr>
-        </table>
-
-        <h2 class="day-title" style="font-size:28px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/25（三） Day 5｜行李寄放、富士回遊、忍野八海與河口湖極限壓縮</h2>
-        
-        <div class="period-header breakfast">【上午】早餐後 ｜ 行李作戰與富士回遊</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">08:00 - 08:40</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">帶著大行李從淺草搭車前往新宿站。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">08:50 - 09:10</td><td class="col-type"><span class="badge b-walk">寄物</span></td><td class="col-desc"><strong>【極度重要】</strong>將大行李寄放在 JR 新宿站投幣式置物櫃 (Coin Lockers)，務必拍照。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">09:30 - 11:14</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">🚄 搭乘特急 <strong>富士回遊號 11 號 (Fuji Excursion 11)</strong> 前往下吉田站。(全車指定席，務必準時上車)</td></tr>
-            <tr><td class="col-time">11:20 - 12:00</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">下吉田站金鳥居拍照打卡 (停留 40 分)。</td></tr>
-        </table>
-
-        <div class="period-header lunch">【下午】午餐後 ｜ 優先衝忍野八海與河口湖</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">12:10 - 13:10</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">下吉田或河口湖周邊吃午餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">13:30 - 15:00</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">搭巴士直奔忍野八海 (優先行程) (停留 1.5 小時)。<span class="buffer-badge">⏳ 預留 20 分</span></td></tr>
-            <tr><td class="col-time">15:20 - 18:00</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">河口湖周邊壓縮行程：河口湖 Lawson 打卡 ➡️ 天晴號遊船 ➡️ 八木崎公園。(總停留 2 小時 40 分，務必趕在 18:00 前結束)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-        </table>
-
-        <div class="period-header dinner">【晚上】晚餐後 ｜ 御殿場入住</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">18:20 - 19:20</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">搭乘巴士前往 御殿場 HOTEL CLAD 辦理入住。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">19:30 - 21:00</td><td class="col-type"><span class="badge b-food">晚餐</span></td><td class="col-desc">御殿場周邊吃晚餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-        </table>
-        
-        <div class="period-header supper">【深夜】宵夜後</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">21:30</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">要去居酒屋 (在飯店內或御殿場周邊)。</td></tr>
-        </table>
-
-        <h2 class="day-title" style="font-size:28px; border:none; margin-bottom:10px; margin-top:40px;">📅 03/26（四） Day 6｜海賊船、大涌谷、衝刺成田機場</h2>
-        
-        <div class="period-header breakfast">【上午】早餐後 ｜ 直攻海賊船與火山口</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">08:00 - 08:45</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">從御殿場搭乘小田急箱根高速巴士前往「桃源台港」 (車程 45 分)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">09:00 - 09:40</td><td class="col-type"><span class="badge b-shop">行程</span></td><td class="col-desc">從桃源台搭乘箱根海賊船 (蘆之湖航行體驗，建議搭短程折返以節省時間) (停留 40 分)。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">09:50 - 10:10</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">返回桃源台，轉搭箱根空中纜車前往大涌谷。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">10:20 - 11:30</td><td class="col-type"><span class="badge b-walk">行程</span></td><td class="col-desc">大涌谷看火山口、吃黑雞蛋 (停留 1 小時 10 分)。<span class="buffer-badge">⏳ 預留 30 分</span></td></tr>
-        </table>
-
-        <div class="period-header lunch">【下午】午餐後 ｜ 下山與拿行李</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">11:45 - 12:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">大涌谷結束後，直接搭乘纜車 ➡️ 登山纜車 ➡️ 登山鐵道 一路下山直達箱根湯本站 (不在老街停留) (總車程約 45 分)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">12:45 - 13:45</td><td class="col-type"><span class="badge b-food">午餐</span></td><td class="col-desc">箱根湯本車站周邊快速吃午餐 (依 TABELOG)。<span class="buffer-badge">⏳ 預留 15 分</span></td></tr>
-            <tr><td class="col-time">14:00 - 15:30</td><td class="col-type"><span class="badge b-train">交通</span></td><td class="col-desc">🚄 從箱根湯本搭乘 <strong>小田急浪漫特快 (Romancecar)</strong> 直達新宿站 (車程約 85 分)。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">15:40 - 16:00</td><td class="col-type"><span class="badge b-walk">寄物</span></td><td class="col-desc">抵達新宿站，<strong>立刻取回 Day 5 寄放的大行李</strong>。<span class="buffer-badge">⏳ 預留 10 分</span></td></tr>
-            <tr><td class="col-time">16:05 - 17:20</td><td class="col-type"><span class="badge b-train">撤退</span></td><td class="col-desc"><strong>【方案 A】</strong> 約 16:05 由 JR 新宿站搭乘 <strong>N'EX 成田特快</strong>，17:20 直達機場 (免轉車，最推薦)。<br>
-                <strong>【方案 B】</strong> 16:00 新宿搭山手線 ➡️ 16:20 日暮里 ➡️ 轉乘 16:25 的 <strong>Skyliner</strong> ➡️ 17:05 抵達機場。</td></tr>
-        </table>
-
-        <div class="period-header dinner">【晚上】晚餐後 ｜ 成田機場</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">17:30 - 19:30</td><td class="col-type"><span class="badge b-food">行程</span></td><td class="col-desc">成田機場內吃晚餐、逛免稅店。準備搭乘晚班機回台。</td></tr>
-        </table>
-        
-        <div class="period-header supper">【深夜】宵夜後 ｜ 台灣收尾</div>
-        <table class="timeline-table">
-            <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
-            <tr><td class="col-time">22:00</td><td class="col-type"><span class="badge b-food">宵夜</span></td><td class="col-desc">回到台灣。要去台灣的居酒屋，為這趟神級滿檔的旅行完美收尾！</td></tr>
-        </table>
-
+        <div class="table-wrap">
+            <table class="timeline-table">
+                <tr><th class="col-time">時間</th><th class="col-type">類型</th><th>行程細節 / 動作指令</th></tr>
+                <tr><td class="col-time">18:00 - 20:30</td><td class="col-type"><span class="badge b-shop">購物</span></td><td class="col-desc">秋葉原各大模型店與動漫周邊狂買 (停留 2.5 小時)。</td></tr>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
     function openTab(evt, tabName) {
         var tabcontent = document.getElementsByClassName("tab-content");
-        for (var i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].classList.remove("active");
-        }
+        for (var i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
         var tablinks = document.getElementsByClassName("tab-btn");
-        for (var i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active");
-        }
+        for (var i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
-        
-        // 切換頁籤時滾動到頂部
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
